@@ -34,6 +34,7 @@ const formName = document.querySelector(".add-form-name");
 const formComment = document.querySelector(".add-form-text"); 
 const buttonAdd = document.querySelector(".add-form-button");
 const comments = document.querySelector(".comments"); 
+const commentEl = document.querySelector(".comment"); 
 const likesCounter = document.querySelector(".likes-counter");
 const likesButton = document.querySelector(".like-button"); 
 
@@ -85,6 +86,7 @@ const renderUsers = () => {
 renderUsers(); 
 
 comments.addEventListener('click', (event) => {
+  event.stopPropagation();
   if (event.target.classList.contains('like-button')) {
     const index = event.target.dataset.index; 
     const comment = commentsAll[index]; 
@@ -99,6 +101,16 @@ comments.addEventListener('click', (event) => {
 
     renderUsers(); 
   }
+
+  const commentEl = event.target.closest(".comment");
+  if (commentEl) {
+    const allCommentEls = Array.from(document.querySelectorAll(".comment"));
+    const index = allCommentEls.indexOf(commentEl); 
+
+    const originalComment = commentsAll[index];
+    formComment.value = `> ${originalComment.comment}`;
+    formComment.focus();
+  }
 })
 
 buttonAdd.addEventListener('click', () => {
@@ -108,8 +120,8 @@ buttonAdd.addEventListener('click', () => {
   }
 
   const newComment = {
-    name: formName.value,
-    comment: formComment.value,
+    name: formName.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+    comment: formComment.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
     liked: false,
     likesTotal: 0,
     date: currentDate
