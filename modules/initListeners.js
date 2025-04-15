@@ -17,7 +17,7 @@ export function commentsListener(
                 comment.likesTotal++
                 comment.liked = true
             }
-
+            // Добавила return:
             renderComments()
             return
         }
@@ -27,6 +27,7 @@ export function commentsListener(
             const index = commentEl.dataset.index
             const originalComment = commentsAll[index]
 
+            // Исправила ошибку в консоли:
             if (originalComment) {
                 formComment.value = `> ${originalComment.comment}`
                 formComment.focus()

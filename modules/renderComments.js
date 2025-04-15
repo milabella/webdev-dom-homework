@@ -2,6 +2,7 @@ import { commentsAll } from './users.js'
 
 const comments = document.querySelector('.comments')
 
+//Поменяла имя:
 export const renderComments = () => {
     const commentsHTML = commentsAll
         .map((comment, index) => {

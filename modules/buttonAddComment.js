@@ -1,3 +1,4 @@
+// Перенесла кнопку в отдельный документ js
 import { replaceSymbols } from './replace.js'
 import { currentDate } from './currentDate.js'
 import { renderComments } from './renderComments.js'
