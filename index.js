@@ -1,36 +1,13 @@
-import { renderUsers } from './modules/renderUsers.js'
-import { currentDate } from './modules/currentDate.js'
+import { renderComments } from './modules/renderComments.js'
 import { commentsAll } from './modules/users.js'
 import { commentsListener } from './modules/initListeners.js'
-import { replaceSymbols } from './modules/replace.js'
+import { buttonAdd } from './modules/buttonAddComment.js'
 
-renderUsers()
+renderComments()
 
-const buttonAdd = document.querySelector('.add-form-button')
-const formName = document.querySelector('.add-form-name')
 const formComment = document.querySelector('.add-form-text')
 const comments = document.querySelector('.comments')
 
-commentsListener(comments, commentsAll, formComment, renderUsers)
+commentsListener(comments, commentsAll, formComment, renderComments)
 
-buttonAdd.addEventListener('click', () => {
-    if (formName.value === '' || formComment.value === '') {
-        alert('Поля нельзя оставлять пустыми')
-        return
-    }
-
-    const newComment = {
-        name: replaceSymbols(formName.value),
-        comment: replaceSymbols(formComment.value),
-        liked: false,
-        likesTotal: 0,
-        date: currentDate,
-    }
-
-    commentsAll.push(newComment)
-
-    formName.value = ''
-    formComment.value = ''
-
-    renderUsers()
-})
+buttonAdd(formComment, commentsAll)

@@ -2,11 +2,11 @@ import { commentsAll } from './users.js'
 
 const comments = document.querySelector('.comments')
 
-export const renderUsers = () => {
+export const renderComments = () => {
     const commentsHTML = commentsAll
         .map((comment, index) => {
             return `
-    <li class="comment">
+    <li class="comment" data-index="${index}">
       <div class="comment-header">
         <div>${comment.name}</div>
         <div>${comment.date}</div>

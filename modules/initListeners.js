@@ -2,7 +2,7 @@ export function commentsListener(
     comments,
     commentsAll,
     formComment,
-    renderUsers,
+    renderComments,
 ) {
     comments.addEventListener('click', (event) => {
         event.stopPropagation()
@@ -18,19 +18,19 @@ export function commentsListener(
                 comment.liked = true
             }
 
-            renderUsers()
+            renderComments()
+            return
         }
 
         const commentEl = event.target.closest('.comment')
         if (commentEl) {
-            const allCommentEls = Array.from(
-                document.querySelectorAll('.comment'),
-            )
-            const index = allCommentEls.indexOf(commentEl)
-
+            const index = commentEl.dataset.index
             const originalComment = commentsAll[index]
-            formComment.value = `> ${originalComment.comment}`
-            formComment.focus()
+
+            if (originalComment) {
+                formComment.value = `> ${originalComment.comment}`
+                formComment.focus()
+            }
         }
     })
 }

@@ -31,11 +31,11 @@ const commentsAll = [
     },
 ]
 
-const renderUsers = () => {
+const renderComments = () => {
     const commentsHTML = commentsAll
         .map((comment, index) => {
             return `
-            <li class="comment">
+            <li class="comment" data-index="${index}">
       <div class="comment-header">
         <div>${comment.name}</div>
         <div>${comment.date}</div>
@@ -58,7 +58,7 @@ const renderUsers = () => {
     comments.innerHTML = commentsHTML
 }
 
-renderUsers()
+renderComments()
 
 comments.addEventListener('click', (event) => {
     event.stopPropagation()
@@ -73,17 +73,19 @@ comments.addEventListener('click', (event) => {
             comment.likesTotal++
             comment.liked = true
         }
-        renderUsers()
+        renderComments()
+        return
     }
 
     const commentEl = event.target.closest('.comment')
     if (commentEl) {
-        const allCommentEls = Array.from(document.querySelectorAll('.comment'))
-        const index = allCommentEls.indexOf(commentEl)
-
+        const index = commentEl.dataset.index
         const originalComment = commentsAll[index]
-        formComment.value = `> ${originalComment.comment}`
-        formComment.focus()
+
+        if (originalComment) {
+            formComment.value = `> ${originalComment.comment}`
+            formComment.focus()
+        }
     }
 })
 
@@ -108,7 +110,7 @@ buttonAdd.addEventListener('click', () => {
     formName.value = ''
     formComment.value = ''
 
-    renderUsers()
+    renderComments()
 })
 
-renderUsers()
+renderComments()
