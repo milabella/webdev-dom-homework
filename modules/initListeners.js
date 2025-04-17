@@ -1,23 +1,23 @@
 export function commentsListener(
-    comments,
+    commentsUl,
     commentsAll,
     formComment,
     renderComments,
 ) {
-    comments.addEventListener('click', (event) => {
+    commentsUl.addEventListener('click', (event) => {
         event.stopPropagation()
         if (event.target.classList.contains('like-button')) {
             const index = event.target.dataset.index
             const comment = commentsAll[index]
 
-            if (comment.liked) {
-                comment.likesTotal--
-                comment.liked = false
+            if (comment.isLiked === true) {
+                comment.likes--
+                comment.isLiked = false
             } else {
-                comment.likesTotal++
-                comment.liked = true
+                comment.likes++
+                comment.isLiked = true
             }
-            // Добавила return:
+
             renderComments()
             return
         }
@@ -27,7 +27,6 @@ export function commentsListener(
             const index = commentEl.dataset.index
             const originalComment = commentsAll[index]
 
-            // Исправила ошибку в консоли:
             if (originalComment) {
                 formComment.value = `> ${originalComment.comment}`
                 formComment.focus()

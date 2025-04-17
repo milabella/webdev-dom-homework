@@ -1,31 +1,31 @@
-import { commentsAll } from './users.js'
+import { commentsAll } from './comments.js'
 
-const comments = document.querySelector('.comments')
+const commentsUl = document.querySelector('.comments')
 
 //Поменяла имя:
 export const renderComments = () => {
     const commentsHTML = commentsAll
         .map((comment, index) => {
             return `
-    <li class="comment" data-index="${index}">
+    <li class="comment" data-index="${index}" data-id="${comment.id}">
       <div class="comment-header">
-        <div>${comment.name}</div>
+        <div>${comment.author.name}</div>
         <div>${comment.date}</div>
       </div>
       <div class="comment-body">
         <div class="comment-text">
-          ${comment.comment}
+          ${comment.text}
         </div>
       </div>
       <div class="comment-footer">
         <div class="likes">
-          <span class="likes-counter">${comment.likesTotal}</span>
-          <button class="like-button ${comment.liked ? '-active-like' : ''}" data-index="${index}"></button>
+          <span class="likes-counter">${comment.likes}</span>
+          <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}" data-id="${comment.id}"></button>
         </div>
       </div>
     </li>`
         })
         .join('')
 
-    comments.innerHTML = commentsHTML
+    commentsUl.innerHTML = commentsHTML
 }

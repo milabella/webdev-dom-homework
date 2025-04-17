@@ -1,7 +1,7 @@
 const formName = document.querySelector('.add-form-name')
 const formComment = document.querySelector('.add-form-text')
 const buttonAdd = document.querySelector('.add-form-button')
-const comments = document.querySelector('.comments')
+const commentsUl = document.querySelector('.comments')
 const myDate = new Date()
 const currentDate =
     myDate.getDate().toString().padStart(2, '0') +
@@ -55,12 +55,12 @@ const renderComments = () => {
         })
         .join('')
 
-    comments.innerHTML = commentsHTML
+    commentsUl.innerHTML = commentsHTML
 }
 
 renderComments()
 
-comments.addEventListener('click', (event) => {
+commentsUl.addEventListener('click', (event) => {
     event.stopPropagation()
     if (event.target.classList.contains('like-button')) {
         const index = event.target.dataset.index
