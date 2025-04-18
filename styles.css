@@ -137,3 +137,12 @@ body {
 .add-form-button:hover {
   opacity: 0.9;
 }
+
+.form-loading {
+  display: none;
+  margin-top: 20px
+}
+
+.-error {
+  border: 1px solid red;
+}

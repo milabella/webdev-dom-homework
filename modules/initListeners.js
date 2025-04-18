@@ -1,36 +1,43 @@
-export function commentsListener(
-    commentsUl,
-    commentsAll,
-    formComment,
-    renderComments,
-) {
-    commentsUl.addEventListener('click', (event) => {
-        event.stopPropagation()
-        if (event.target.classList.contains('like-button')) {
-            const index = event.target.dataset.index
-            const comment = commentsAll[index]
+import { commentsAll } from './comments.js'
 
-            if (comment.isLiked === true) {
-                comment.likes--
-                comment.isLiked = false
-            } else {
-                comment.likes++
-                comment.isLiked = true
-            }
+export const initCommentListener = (renderComments) => {
+  const commentsUl = document.querySelector('.comments')
+  const text = document.querySelector('.add-form-text')
 
-            renderComments()
-            return
-        }
+  commentsUl.addEventListener('click', (event) => {
+    event.stopPropagation()
 
-        const commentEl = event.target.closest('.comment')
-        if (commentEl) {
-            const index = commentEl.dataset.index
-            const originalComment = commentsAll[index]
+    const likeButton = event.target.closest('.like-button')
+    const commentEl = event.target.closest('.comment')
 
-            if (originalComment) {
-                formComment.value = `> ${originalComment.comment}`
-                formComment.focus()
-            }
-        }
-    })
+    if (likeButton && commentEl) {
+      const id = commentEl.dataset.id
+      const comment = commentsAll.find((c) => c.id.toString() === id)
+
+      if (!comment) {
+        return
+      }
+
+      if (comment.isLiked) {
+        comment.likes--
+        comment.isLiked = false
+      } else {
+        comment.likes++
+        comment.isLiked = true
+      }
+
+      renderComments()
+      return
+    }
+
+    if (commentEl) {
+      const id = commentEl.dataset.id
+      const originalComment = commentsAll.find((c) => c.id.toString() === id)
+
+      if (originalComment) {
+        text.value = `>${originalComment.text}\n`
+        text.focus()
+      }
+    }
+  })
 }

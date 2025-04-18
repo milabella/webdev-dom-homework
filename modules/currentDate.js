@@ -2,7 +2,7 @@ const myDate = new Date();
 export const currentDate =
   myDate.getDate().toString().padStart(2, "0") +
   "." +
-  myDate.getMonth().toString().padStart(2, "0") +
+  (myDate.getMonth() + 1).toString().padStart(2, "0") +
   "." +
   myDate.getFullYear() +
   " " +

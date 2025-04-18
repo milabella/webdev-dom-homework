@@ -1,41 +1,65 @@
 // Перенесла кнопку в отдельный документ js
 import { replaceSymbols } from './replace.js'
-import { currentDate } from './currentDate.js'
-import { renderComments } from './renderComments.js'
+import { postComment } from './fetchComments.js'
 import { updateComments } from './comments.js'
 
-const buttonAddComment = document.querySelector('.add-form-button')
-const formName = document.querySelector('.add-form-name')
+export const initAddCommentListener = (renderComments) => {
+  const name = document.querySelector('.add-form-name')
+  const text = document.querySelector('.add-form-text')
+  const addButton = document.querySelector('.add-form-button')
 
-export function buttonAdd(formComment) {
-    buttonAddComment.addEventListener('click', () => {
-        if (formName.value === '' || formComment.value === '') {
-            alert('Поля нельзя оставлять пустыми')
-            return
+  addButton.addEventListener('click', () => {
+    if (!name.value || !text.value) {
+      alert('Поля нельзя оставлять пустыми')
+      return
+    }
+
+    document.querySelector('.form-loading').style.display = 'block'
+    document.querySelector('.add-form').style.display = 'none'
+
+    postComment(replaceSymbols(text.value), replaceSymbols(name.value))
+      .then((data) => {
+        document.querySelector('.form-loading').style.display = 'none'
+        document.querySelector('.add-form').style.display = 'flex'
+
+        updateComments(data)
+        renderComments()
+        name.value = ''
+        text.value = ''
+
+        addButton.disabled = true
+        addButton.textContent = 'комментарий публикуется...'
+      })
+      .catch((error) => {
+        document.querySelector('.form-loading').style.display = 'none'
+        document.querySelector('.add-form').style.display = 'flex'
+
+        if (error.message === 'Failed to fetch') {
+          alert('Нет интернета')
         }
 
-        const newComment = {
-            date: currentDate,
-            likes: 0,
-            isLiked: false,
-            text: replaceSymbols(formComment.value),
-            name: replaceSymbols(formName.value),
+        if (error.message === 'Сервер упал') {
+          alert('Ошибка сервера')
         }
 
-        fetch('https://wedev-api.sky.pro/api/v1/mila-belavina/comments', {
-            method: 'POST',
-            body: JSON.stringify(newComment),
-        })
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                console.log(data)
-                updateComments(data.comments)
-                renderComments()
-            })
+        if (error.message === 'Ошибка запроса') {
+          alert('Имя и комментарий должны быть не короче 3х символов')
 
-        formName.value = ''
-        formComment.value = ''
-    })
+          name.classList.add('.-error')
+          text.classList.add('.-error')
+
+          setTimeout(() => {
+            name.classList.remove('.-error')
+            text.classList.remove('.-error')
+          }, 2000)
+        }
+      })
+      .finally(() => {
+        document.querySelector('.form-loading').style.display = 'none'
+        document.querySelector('.add-form').style.display = 'flex'
+
+        addButton.disabled = false
+        addButton.textContent = 'Написать'
+      })
+  })
 }

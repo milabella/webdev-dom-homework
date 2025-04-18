@@ -1,25 +1,17 @@
-import { renderComments } from './modules/renderComments.js'
-import { commentsAll, updateComments } from './modules/comments.js'
-import { commentsListener } from './modules/initListeners.js'
-import { buttonAdd } from './modules/buttonAddComment.js'
+import { renderComments } from "./modules/renderComments.js";
+import { updateComments } from "./modules/comments.js";
+import { fetchComments } from "./modules/fetchComments.js";
+import { initAddCommentListener } from "./modules/buttonAddComment.js";
+import { initCommentListener } from "./modules/initListeners.js";
 
-fetch('https://wedev-api.sky.pro/api/v1/mila-belavina/comments', {
-    method: 'GET',
-})
-    .then((response) => {
-        return response.json()
-    })
-    .then((data) => {
-        console.log(data)
-        updateComments(data.comments)
-        renderComments()
-    })
+const commentsUl = document.querySelector(".comments");
 
-renderComments()
+commentsUl.innerHTML = "Комментарии загружаются...";
 
-const formComment = document.querySelector('.add-form-text')
-const commentsUl = document.querySelector('.comments')
+fetchComments().then((data) => {
+  updateComments(data);
+  renderComments();
+});
 
-commentsListener(commentsUl, commentsAll, formComment, renderComments)
-
-buttonAdd(formComment, commentsAll)
+initAddCommentListener(renderComments);
+initCommentListener(renderComments);
